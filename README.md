@@ -1,15 +1,13 @@
 <div align="center">
 
-![Arknox Framework Logo](public/img/arknox.png)
-
 # 🚀 Arknox Framework
 
 ## The Most Advanced PHP Framework for Modern Web Development
 
 [![PHP Version](https://img.shields.io/badge/PHP-8.1%2B-blue.svg)](https://php.net)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/Version-1.0.0-orange.svg)](https://github.com)
-[![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey.svg)](https://github.com)
+[![Version](https://img.shields.io/badge/Version-1.0.0-orange.svg)](https://github.com/mdakashhossain1/Arknox-Framwork)
+[![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey.svg)](https://github.com/mdakashhossain1/Arknox-Framwork)
 
 </div>
 
@@ -2049,5 +2047,6 @@ arknox serve
 *Built with ❤️ by the Arknox Technology team under the leadership of CEO Akash Hossain*
 *© 2025 Arknox Technology. All rights reserved.*
 *Arknox Framework - A product of Arknox Technology | https://arknox.dev*
-#   A r k n o x - F r a m e w o r k  
+#   A r k n o x - F r a m e w o r k 
+ 
  
