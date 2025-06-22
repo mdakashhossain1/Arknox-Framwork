@@ -2047,6 +2047,4 @@ arknox serve
 *Built with ❤️ by the Arknox Technology team under the leadership of CEO Akash Hossain*
 *© 2025 Arknox Technology. All rights reserved.*
 *Arknox Framework - A product of Arknox Technology | https://arknox.dev*
-#   A r k n o x - F r a m e w o r k 
- 
- 
+#
