@@ -1,0 +1,351 @@
+# 🐳 Complete E-Commerce Application Stack
+version: '3.8'
+
+services:
+  # ========================================
+  # WEB APPLICATION
+  # ========================================
+  app:
+    build:
+      context: .
+      target: production
+    container_name: ecommerce-app
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./storage:/var/www/storage
+      - ./bootstrap/cache:/var/www/bootstrap/cache
+      - uploads:/var/www/public/uploads
+    environment:
+      - APP_ENV=production
+      - APP_DEBUG=false
+      - DB_HOST=database
+      - DB_DATABASE=ecommerce
+      - DB_USERNAME=ecommerce_user
+      - DB_PASSWORD=${DB_PASSWORD}
+      - REDIS_HOST=redis
+      - CACHE_DRIVER=redis
+      - SESSION_DRIVER=redis
+      - QUEUE_CONNECTION=redis
+    depends_on:
+      - database
+      - redis
+    networks:
+      - ecommerce-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # ========================================
+  # WEBSOCKET SERVER
+  # ========================================
+  websocket:
+    build:
+      context: .
+      target: websocket
+    container_name: ecommerce-websocket
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      - APP_ENV=production
+      - DB_HOST=database
+      - DB_DATABASE=ecommerce
+      - DB_USERNAME=ecommerce_user
+      - DB_PASSWORD=${DB_PASSWORD}
+      - REDIS_HOST=redis
+    depends_on:
+      - database
+      - redis
+    networks:
+      - ecommerce-network
+
+  # ========================================
+  # QUEUE WORKERS
+  # ========================================
+  queue:
+    build:
+      context: .
+      target: queue
+    container_name: ecommerce-queue
+    restart: unless-stopped
+    environment:
+      - APP_ENV=production
+      - DB_HOST=database
+      - DB_DATABASE=ecommerce
+      - DB_USERNAME=ecommerce_user
+      - DB_PASSWORD=${DB_PASSWORD}
+      - REDIS_HOST=redis
+      - QUEUE_CONNECTION=redis
+    depends_on:
+      - database
+      - redis
+    networks:
+      - ecommerce-network
+    deploy:
+      replicas: 2
+
+  # ========================================
+  # TASK SCHEDULER
+  # ========================================
+  scheduler:
+    build:
+      context: .
+      target: scheduler
+    container_name: ecommerce-scheduler
+    restart: unless-stopped
+    environment:
+      - APP_ENV=production
+      - DB_HOST=database
+      - DB_DATABASE=ecommerce
+      - DB_USERNAME=ecommerce_user
+      - DB_PASSWORD=${DB_PASSWORD}
+      - REDIS_HOST=redis
+    depends_on:
+      - database
+      - redis
+    networks:
+      - ecommerce-network
+
+  # ========================================
+  # DATABASE
+  # ========================================
+  database:
+    image: mysql:8.0
+    container_name: ecommerce-database
+    restart: unless-stopped
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+      - MYSQL_DATABASE=ecommerce
+      - MYSQL_USER=ecommerce_user
+      - MYSQL_PASSWORD=${DB_PASSWORD}
+    volumes:
+      - database_data:/var/lib/mysql
+      - ./docker/mysql/my.cnf:/etc/mysql/conf.d/my.cnf
+      - ./docker/mysql/init:/docker-entrypoint-initdb.d
+    networks:
+      - ecommerce-network
+    command: --default-authentication-plugin=mysql_native_password
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # ========================================
+  # REDIS CACHE & SESSIONS
+  # ========================================
+  redis:
+    image: redis:7-alpine
+    container_name: ecommerce-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+      - ./docker/redis/redis.conf:/usr/local/etc/redis/redis.conf
+    networks:
+      - ecommerce-network
+    command: redis-server /usr/local/etc/redis/redis.conf
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ========================================
+  # ELASTICSEARCH (Search Engine)
+  # ========================================
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.11.0
+    container_name: ecommerce-elasticsearch
+    restart: unless-stopped
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+    networks:
+      - ecommerce-network
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:9200/_cluster/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # ========================================
+  # KIBANA (Elasticsearch Dashboard)
+  # ========================================
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.11.0
+    container_name: ecommerce-kibana
+    restart: unless-stopped
+    ports:
+      - "5601:5601"
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    depends_on:
+      - elasticsearch
+    networks:
+      - ecommerce-network
+
+  # ========================================
+  # NGINX LOAD BALANCER
+  # ========================================
+  loadbalancer:
+    image: nginx:alpine
+    container_name: ecommerce-loadbalancer
+    restart: unless-stopped
+    ports:
+      - "8000:80"
+    volumes:
+      - ./docker/nginx/load-balancer.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - app
+    networks:
+      - ecommerce-network
+
+  # ========================================
+  # MONITORING & OBSERVABILITY
+  # ========================================
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: ecommerce-prometheus
+    restart: unless-stopped
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./docker/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    networks:
+      - ecommerce-network
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: ecommerce-grafana
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD}
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./docker/grafana/dashboards:/etc/grafana/provisioning/dashboards
+      - ./docker/grafana/datasources:/etc/grafana/provisioning/datasources
+    depends_on:
+      - prometheus
+    networks:
+      - ecommerce-network
+
+  # ========================================
+  # LOG AGGREGATION
+  # ========================================
+  filebeat:
+    image: docker.elastic.co/beats/filebeat:8.11.0
+    container_name: ecommerce-filebeat
+    restart: unless-stopped
+    user: root
+    volumes:
+      - ./docker/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - filebeat_data:/usr/share/filebeat/data
+    depends_on:
+      - elasticsearch
+    networks:
+      - ecommerce-network
+
+  # ========================================
+  # BACKUP SERVICE
+  # ========================================
+  backup:
+    image: alpine:latest
+    container_name: ecommerce-backup
+    restart: unless-stopped
+    volumes:
+      - database_data:/backup/database:ro
+      - uploads:/backup/uploads:ro
+      - ./docker/backup/backup.sh:/backup.sh
+    environment:
+      - BACKUP_SCHEDULE=0 2 * * *  # Daily at 2 AM
+      - S3_BUCKET=${BACKUP_S3_BUCKET}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+    networks:
+      - ecommerce-network
+    command: sh -c "apk add --no-cache aws-cli && crond -f"
+
+  # ========================================
+  # DEVELOPMENT TOOLS (Development only)
+  # ========================================
+  mailhog:
+    image: mailhog/mailhog:latest
+    container_name: ecommerce-mailhog
+    restart: unless-stopped
+    ports:
+      - "1025:1025"  # SMTP
+      - "8025:8025"  # Web UI
+    networks:
+      - ecommerce-network
+    profiles:
+      - development
+
+  adminer:
+    image: adminer:latest
+    container_name: ecommerce-adminer
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      - ADMINER_DEFAULT_SERVER=database
+    depends_on:
+      - database
+    networks:
+      - ecommerce-network
+    profiles:
+      - development
+
+# ========================================
+# VOLUMES
+# ========================================
+volumes:
+  database_data:
+    driver: local
+  redis_data:
+    driver: local
+  elasticsearch_data:
+    driver: local
+  prometheus_data:
+    driver: local
+  grafana_data:
+    driver: local
+  filebeat_data:
+    driver: local
+  uploads:
+    driver: local
+
+# ========================================
+# NETWORKS
+# ========================================
+networks:
+  ecommerce-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16

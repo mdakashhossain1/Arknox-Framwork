@@ -1,0 +1,71 @@
+<header>
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+        <div class="container">
+            <!-- Brand -->
+            <a class="navbar-brand d-flex align-items-center" href="/">
+                <img src="{{ asset('img/arknox.png') }}" alt="Arknox Framework" class="me-2">
+                <span class="fw-bold">Arknox Framework</span>
+            </a>
+
+            <!-- Mobile toggle -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Navigation -->
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">🏠 Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/docs">📚 Documentation</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            🚀 Quick Start
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/docs/installation">Installation</a></li>
+                            <li><a class="dropdown-item" href="/docs/getting-started">Getting Started</a></li>
+                            <li><a class="dropdown-item" href="/docs/cli">CLI Commands</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="/docs/features">All Features</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/info">ℹ️ System Info</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/docs/company">🏢 About Us</a>
+                    </li>
+                </ul>
+
+                <!-- Right side navigation -->
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://github.com/arknox/framework" target="_blank">
+                            <i class="fab fa-github"></i> GitHub
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://community.arknox.dev" target="_blank">
+                            <i class="fas fa-users"></i> Community
+                        </a>
+                    </li>
+
+                    <!-- Search -->
+                    <li class="nav-item">
+                        <form class="d-flex" action="/docs/search" method="GET">
+                            <input class="form-control form-control-sm me-2" type="search" name="q"
+                                   placeholder="Search docs..." style="width: 150px;">
+                            <button class="btn btn-outline-primary btn-sm" type="submit">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>

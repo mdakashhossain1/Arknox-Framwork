@@ -1,0 +1,330 @@
+{% extends "layouts/main.twig" %}
+
+{% block head %}
+    <style>
+        .docs-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 0;
+        }
+        .docs-nav {
+            background: #f8f9fa;
+            padding: 15px 0;
+            border-bottom: 1px solid #dee2e6;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .docs-sidebar {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            position: sticky;
+            top: 100px;
+            max-height: calc(100vh - 120px);
+            overflow-y: auto;
+        }
+        .docs-content {
+            background: white;
+            border-radius: 10px;
+            padding: 40px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .docs-content h2 {
+            color: #667eea;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+            margin-top: 40px;
+            margin-bottom: 20px;
+        }
+        .docs-content h3 {
+            color: #495057;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+        .docs-content pre {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 15px;
+            overflow-x: auto;
+        }
+        .docs-content code {
+            background: #f8f9fa;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 0.9em;
+        }
+        .docs-content pre code {
+            background: transparent;
+            padding: 0;
+        }
+        .docs-content table {
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        .docs-content table th {
+            background: #667eea;
+            color: white;
+            border: none;
+        }
+        .docs-content table td {
+            border-color: #dee2e6;
+        }
+        .sidebar-nav {
+            list-style: none;
+            padding: 0;
+        }
+        .sidebar-nav li {
+            margin-bottom: 5px;
+        }
+        .sidebar-nav a {
+            display: block;
+            padding: 8px 12px;
+            color: #495057;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+        .sidebar-nav a:hover {
+            background: #667eea;
+            color: white;
+        }
+        .sidebar-nav a.active {
+            background: #667eea;
+            color: white;
+            font-weight: 600;
+        }
+        .navigation-buttons {
+            border-top: 1px solid #dee2e6;
+            padding-top: 30px;
+            margin-top: 40px;
+        }
+        .breadcrumb {
+            background: transparent;
+            padding: 0;
+        }
+        .breadcrumb-item + .breadcrumb-item::before {
+            content: "›";
+            color: #6c757d;
+        }
+        .toc {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        .toc ul {
+            margin-bottom: 0;
+        }
+        .toc a {
+            color: #667eea;
+            text-decoration: none;
+        }
+        .toc a:hover {
+            text-decoration: underline;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+<!-- Header Section -->
+<section class="docs-header">
+    <div class="container">
+        <h1 class="display-5 fw-bold">{{ title }}</h1>
+        <p class="lead">Arknox Framework Documentation</p>
+    </div>
+</section>
+
+<!-- Navigation -->
+<section class="docs-nav">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                <li class="breadcrumb-item"><a href="/docs">Documentation</a></li>
+                <li class="breadcrumb-item active">{{ title }}</li>
+            </ol>
+        </nav>
+    </div>
+</section>
+
+<!-- Main Content -->
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-lg-3 mb-4">
+                <div class="docs-sidebar">
+                    <h5 class="fw-bold mb-3">Documentation</h5>
+                    <ul class="sidebar-nav">
+                        {% for key, sectionTitle in sections %}
+                        <li>
+                            <a href="/docs/{{ key }}" 
+                               class="{{ key == section ? 'active' : '' }}">
+                                {{ sectionTitle }}
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    
+                    <!-- Quick Search -->
+                    <div class="mt-4">
+                        <h6 class="fw-bold">Quick Search</h6>
+                        <form action="/docs/search" method="GET">
+                            <div class="input-group input-group-sm">
+                                <input type="text" name="q" class="form-control" 
+                                       placeholder="Search docs...">
+                                <button type="submit" class="btn btn-outline-primary">🔍</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Content -->
+            <div class="col-lg-9">
+                <div class="docs-content">
+                    <!-- Table of Contents for longer sections -->
+                    {% if section in ['features', 'database', 'comparison', 'deployment'] %}
+                    <div class="toc">
+                        <h6 class="fw-bold mb-3">📋 Table of Contents</h6>
+                        <ul>
+                            {% if section == 'features' %}
+                                <li><a href="#multi-database">Multi-Database Support</a></li>
+                                <li><a href="#template-engine">Template Engine</a></li>
+                                <li><a href="#debugging">Advanced Debugging</a></li>
+                                <li><a href="#package-management">Package Management</a></li>
+                            {% elseif section == 'database' %}
+                                <li><a href="#basic-usage">Basic Usage</a></li>
+                                <li><a href="#relationships">Relationships</a></li>
+                                <li><a href="#multiple-databases">Multiple Databases</a></li>
+                            {% elseif section == 'comparison' %}
+                                <li><a href="#performance">Performance Comparison</a></li>
+                                <li><a href="#features-comparison">Feature Comparison</a></li>
+                                <li><a href="#why-arknox">Why Choose Arknox</a></li>
+                            {% elseif section == 'deployment' %}
+                                <li><a href="#checklist">Pre-Deployment Checklist</a></li>
+                                <li><a href="#web-server">Web Server Configuration</a></li>
+                                <li><a href="#optimization">Performance Optimization</a></li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Section Content -->
+                    {{ content.content|raw }}
+                    
+                    <!-- Navigation Buttons -->
+                    <div class="navigation-buttons">
+                        <div class="row">
+                            <div class="col-6">
+                                {% if navigation.previous %}
+                                <a href="/docs/{{ navigation.previous.key }}" 
+                                   class="btn btn-outline-primary">
+                                    ← {{ navigation.previous.title }}
+                                </a>
+                                {% endif %}
+                            </div>
+                            <div class="col-6 text-end">
+                                {% if navigation.next %}
+                                <a href="/docs/{{ navigation.next.key }}" 
+                                   class="btn btn-primary">
+                                    {{ navigation.next.title }} →
+                                </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Feedback Section -->
+                    <div class="mt-5 p-4 bg-light rounded">
+                        <h5 class="fw-bold">Was this helpful?</h5>
+                        <p class="text-muted mb-3">Help us improve our documentation</p>
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-outline-success btn-sm" onclick="sendFeedback('positive')">
+                                👍 Yes, helpful
+                            </button>
+                            <button class="btn btn-outline-danger btn-sm" onclick="sendFeedback('negative')">
+                                👎 Needs improvement
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+        
+        // Highlight current section in TOC
+        const headings = document.querySelectorAll('h2[id], h3[id]');
+        const tocLinks = document.querySelectorAll('.toc a');
+        
+        function highlightTOC() {
+            let current = '';
+            headings.forEach(heading => {
+                const rect = heading.getBoundingClientRect();
+                if (rect.top <= 100) {
+                    current = heading.id;
+                }
+            });
+            
+            tocLinks.forEach(link => {
+                link.classList.remove('fw-bold');
+                if (link.getAttribute('href') === '#' + current) {
+                    link.classList.add('fw-bold');
+                }
+            });
+        }
+        
+        window.addEventListener('scroll', highlightTOC);
+        
+        // Copy code blocks
+        document.querySelectorAll('pre code').forEach(block => {
+            const button = document.createElement('button');
+            button.className = 'btn btn-sm btn-outline-secondary position-absolute';
+            button.style.top = '10px';
+            button.style.right = '10px';
+            button.textContent = 'Copy';
+            button.onclick = () => {
+                navigator.clipboard.writeText(block.textContent);
+                button.textContent = 'Copied!';
+                setTimeout(() => button.textContent = 'Copy', 2000);
+            };
+            
+            block.parentElement.style.position = 'relative';
+            block.parentElement.appendChild(button);
+        });
+    });
+    
+    // Feedback function
+    function sendFeedback(type) {
+        // In a real implementation, this would send feedback to the server
+        const message = type === 'positive' ? 
+            'Thank you for your feedback!' : 
+            'Thank you! We\'ll work on improving this section.';
+        
+        alert(message);
+    }
+</script>
+{% endblock %}

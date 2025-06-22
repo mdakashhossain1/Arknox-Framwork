@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title|default('Arknox Framework') }}</title>
+    <meta name="description" content="Arknox Framework - The Most Advanced PHP Framework for Modern Web Development">
+    <meta name="keywords" content="PHP, Framework, MVC, Arknox, Web Development, Laravel Alternative">
+    <meta name="author" content="Arknox Framework Team">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{{ asset('img/arknox.png') }}">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+        }
+        .navbar-brand img {
+            height: 40px;
+        }
+        .alert {
+            border-radius: 10px;
+            border: none;
+            margin-bottom: 20px;
+        }
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+        }
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        .alert-warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+    </style>
+
+    <!-- Add your CSS files here -->
+    {{ css('style.css')|raw }}
+
+    <!-- Additional head content -->
+    {% if head_content is defined %}
+        {{ head_content|raw }}
+    {% endif %}
+
+    <!-- Block for additional head content -->
+    {% block head %}{% endblock %}
+</head>
+<body>
+    <!-- Header -->
+    {% include 'layouts/header.twig' %}
+
+    <!-- Main Content -->
+    <main>
+        <!-- Flash messages -->
+        {% if flash('success') %}
+            <div class="alert alert-success">
+                {{ flash('success') }}
+            </div>
+        {% endif %}
+        
+        {% if flash('error') %}
+            <div class="alert alert-error">
+                {{ flash('error') }}
+            </div>
+        {% endif %}
+        
+        {% if flash('warning') %}
+            <div class="alert alert-warning">
+                {{ flash('warning') }}
+            </div>
+        {% endif %}
+        
+        <!-- Page content -->
+        {% block content %}
+            {{ content|raw }}
+        {% endblock %}
+    </main>
+
+    <!-- Footer -->
+    {% include 'layouts/footer.twig' %}
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Add your JavaScript files here -->
+    {{ js('app.js')|raw }}
+
+    <!-- Additional scripts -->
+    {% if scripts is defined %}
+        {{ scripts|raw }}
+    {% endif %}
+
+    <!-- Block for additional scripts -->
+    {% block scripts %}{% endblock %}
+</body>
+</html>

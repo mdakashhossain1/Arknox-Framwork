@@ -1,0 +1,27 @@
+#!/usr/bin/env php
+<?php
+/**
+ * MVC Framework Console Application
+ * 
+ * Command-line interface for the MVC framework
+ * Similar to Laravel's Artisan command
+ */
+
+// Check if running from command line
+if (php_sapi_name() !== 'cli') {
+    echo "This script can only be run from the command line.\n";
+    exit(1);
+}
+
+// Bootstrap the application
+require_once __DIR__ . '/bootstrap.php';
+
+use App\Console\ConsoleApplication;
+
+try {
+    $console = new ConsoleApplication();
+    $console->run($argv);
+} catch (Exception $e) {
+    echo "Error: " . $e->getMessage() . "\n";
+    exit(1);
+}

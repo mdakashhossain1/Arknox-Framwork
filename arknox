@@ -1,0 +1,138 @@
+#!/usr/bin/env php
+<?php
+
+/**
+ * Arknox Framework CLI
+ * 
+ * Cross-platform command line interface for Arknox Framework
+ * 
+ * @package Arknox
+ * @version 1.0.0
+ * @author Arknox Team
+ */
+
+// Check PHP version
+if (version_compare(PHP_VERSION, '8.1.0', '<')) {
+    echo "Arknox Framework requires PHP 8.1 or higher. You are running " . PHP_VERSION . "\n";
+    exit(1);
+}
+
+// Define framework paths
+define('ARKNOX_START', microtime(true));
+define('ARKNOX_ROOT', __DIR__);
+define('ARKNOX_APP', ARKNOX_ROOT . '/app');
+define('ARKNOX_CONFIG', ARKNOX_ROOT . '/config');
+define('ARKNOX_STORAGE', ARKNOX_ROOT . '/storage');
+define('ARKNOX_PUBLIC', ARKNOX_ROOT . '/public');
+
+// Check if running from correct directory
+if (!file_exists(ARKNOX_ROOT . '/composer.json')) {
+    echo "Error: Please run this command from the Arknox Framework root directory.\n";
+    exit(1);
+}
+
+// Load Composer autoloader
+if (!file_exists(ARKNOX_ROOT . '/vendor/autoload.php')) {
+    echo "Error: Dependencies not installed. Please run 'composer install' first.\n";
+    exit(1);
+}
+
+require_once ARKNOX_ROOT . '/vendor/autoload.php';
+
+// Load environment variables
+if (file_exists(ARKNOX_ROOT . '/.env')) {
+    $dotenv = Dotenv\Dotenv::createImmutable(ARKNOX_ROOT);
+    $dotenv->load();
+}
+
+// Initialize the console application
+use App\Core\Console\Application;
+
+try {
+    $app = new Application();
+    
+    // Register built-in commands
+    $app->registerCommands([
+        // Framework commands
+        'serve' => \App\Console\Commands\ServeCommand::class,
+        'key:generate' => \App\Console\Commands\KeyGenerateCommand::class,
+        'env:setup' => \App\Console\Commands\EnvSetupCommand::class,
+        
+        // Database commands
+        'migrate' => \App\Console\Commands\MigrateCommand::class,
+        'migrate:rollback' => \App\Console\Commands\MigrateRollbackCommand::class,
+        'migrate:reset' => \App\Console\Commands\MigrateResetCommand::class,
+        'migrate:refresh' => \App\Console\Commands\MigrateRefreshCommand::class,
+        'db:create' => \App\Console\Commands\DatabaseCreateCommand::class,
+        'db:seed' => \App\Console\Commands\DatabaseSeedCommand::class,
+        
+        // Generator commands
+        'make:model' => \App\Console\Commands\MakeModelCommand::class,
+        'make:controller' => \App\Console\Commands\MakeControllerCommand::class,
+        'make:middleware' => \App\Console\Commands\MakeMiddlewareCommand::class,
+        'make:migration' => \App\Console\Commands\MakeMigrationCommand::class,
+        'make:seeder' => \App\Console\Commands\MakeSeederCommand::class,
+        'make:factory' => \App\Console\Commands\MakeFactoryCommand::class,
+        'make:command' => \App\Console\Commands\MakeCommandCommand::class,
+        'make:plugin' => \App\Console\Commands\MakePluginCommand::class,
+        
+        // Package management
+        'package:install' => \App\Console\Commands\PackageInstallCommand::class,
+        'package:remove' => \App\Console\Commands\PackageRemoveCommand::class,
+        'package:list' => \App\Console\Commands\PackageListCommand::class,
+        'package:update' => \App\Console\Commands\PackageUpdateCommand::class,
+        
+        // Cache commands
+        'cache:clear' => \App\Console\Commands\CacheClearCommand::class,
+        'cache:config' => \App\Console\Commands\CacheConfigCommand::class,
+        'cache:routes' => \App\Console\Commands\CacheRoutesCommand::class,
+        
+        // Queue commands
+        'queue:work' => \App\Console\Commands\QueueWorkCommand::class,
+        'queue:listen' => \App\Console\Commands\QueueListenCommand::class,
+        'queue:clear' => \App\Console\Commands\QueueClearCommand::class,
+        
+        // Plugin commands
+        'plugin:list' => \App\Console\Commands\PluginListCommand::class,
+        'plugin:enable' => \App\Console\Commands\PluginEnableCommand::class,
+        'plugin:disable' => \App\Console\Commands\PluginDisableCommand::class,
+        'plugin:install' => \App\Console\Commands\PluginInstallCommand::class,
+        
+        // Admin commands
+        'admin:user' => \App\Console\Commands\AdminUserCommand::class,
+        'admin:generate' => \App\Console\Commands\AdminGenerateCommand::class,
+        
+        // Development commands
+        'docs:generate' => \App\Console\Commands\DocsGenerateCommand::class,
+        'optimize' => \App\Console\Commands\OptimizeCommand::class,
+        'optimize:clear' => \App\Console\Commands\OptimizeClearCommand::class,
+        
+        // System commands
+        'about' => \App\Console\Commands\AboutCommand::class,
+        'version' => \App\Console\Commands\VersionCommand::class,
+        'health' => \App\Console\Commands\HealthCheckCommand::class,
+        'config:show' => \App\Console\Commands\ConfigShowCommand::class,
+
+        // Debug commands
+        'debug:status' => \App\Console\Commands\DebugStatusCommand::class,
+        'debug:clear' => \App\Console\Commands\DebugClearCommand::class,
+        'debug:report' => \App\Console\Commands\DebugReportCommand::class,
+    ]);
+    
+    // Auto-discover commands from app/Console/Commands
+    $app->discoverCommands(ARKNOX_APP . '/Console/Commands');
+    
+    // Run the application
+    $exitCode = $app->run($argv);
+    
+} catch (Exception $e) {
+    echo "Error: " . $e->getMessage() . "\n";
+    
+    if (isset($_ENV['APP_DEBUG']) && $_ENV['APP_DEBUG'] === 'true') {
+        echo "\nStack trace:\n" . $e->getTraceAsString() . "\n";
+    }
+    
+    exit(1);
+}
+
+exit($exitCode);

@@ -1,0 +1,280 @@
+{% extends "layouts/main.twig" %}
+
+{% block head %}
+    <style>
+        .docs-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 60px 0;
+            text-align: center;
+        }
+        .docs-nav {
+            background: #f8f9fa;
+            padding: 20px 0;
+            border-bottom: 1px solid #dee2e6;
+        }
+        .section-card {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            height: 100%;
+        }
+        .section-card:hover {
+            transform: translateY(-5px);
+        }
+        .section-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: #667eea;
+        }
+        .featured-section {
+            border: 2px solid #667eea;
+        }
+        .search-box {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        .breadcrumb {
+            background: transparent;
+            padding: 0;
+        }
+        .breadcrumb-item + .breadcrumb-item::before {
+            content: "›";
+            color: #6c757d;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+<!-- Header Section -->
+<section class="docs-header">
+    <div class="container">
+        <h1 class="display-4 fw-bold">{{ title }}</h1>
+        <p class="lead">{{ subtitle }}</p>
+        
+        <!-- Search Box -->
+        <div class="search-box mt-4">
+            <form action="/docs/search" method="GET" class="d-flex">
+                <input type="text" name="q" class="form-control form-control-lg me-2" 
+                       placeholder="Search documentation..." value="{{ app.request.get('q') }}">
+                <button type="submit" class="btn btn-light btn-lg">🔍</button>
+            </form>
+        </div>
+    </div>
+</section>
+
+<!-- Navigation -->
+<section class="docs-nav">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                <li class="breadcrumb-item active">Documentation</li>
+            </ol>
+        </nav>
+    </div>
+</section>
+
+<!-- Featured Sections -->
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold">Get Started Quickly</h2>
+            <p class="lead">Essential guides to get you up and running</p>
+        </div>
+        
+        <div class="row">
+            {% for section in featured_sections %}
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="section-card featured-section text-center">
+                    <div class="section-icon">{{ section.icon }}</div>
+                    <h5 class="fw-bold">{{ section.title }}</h5>
+                    <p class="text-muted">{{ section.description }}</p>
+                    <a href="/docs/{{ section.key }}" class="btn btn-primary">Read More</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- All Documentation Sections -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold">Complete Documentation</h2>
+            <p class="lead">Comprehensive guides and references</p>
+        </div>
+        
+        <div class="row">
+            {% for key, title in sections %}
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="section-card">
+                    <h5 class="fw-bold">
+                        <a href="/docs/{{ key }}" class="text-decoration-none">{{ title }}</a>
+                    </h5>
+                    <p class="text-muted">
+                        {% if key == 'overview' %}
+                            Learn about Arknox Framework's revolutionary features and benefits
+                        {% elseif key == 'installation' %}
+                            Step-by-step installation guide for all platforms
+                        {% elseif key == 'getting-started' %}
+                            Build your first application with Arknox Framework
+                        {% elseif key == 'cli' %}
+                            Master the powerful command-line interface
+                        {% elseif key == 'features' %}
+                            Explore advanced framework capabilities
+                        {% elseif key == 'database' %}
+                            Enhanced ORM and multi-database support
+                        {% elseif key == 'templates' %}
+                            Advanced Twig template engine integration
+                        {% elseif key == 'debugging' %}
+                            Visual debugging and performance monitoring
+                        {% elseif key == 'packages' %}
+                            Built-in package management system
+                        {% elseif key == 'comparison' %}
+                            See how Arknox compares to other frameworks
+                        {% elseif key == 'deployment' %}
+                            Production deployment and optimization
+                        {% elseif key == 'troubleshooting' %}
+                            Common issues and solutions
+                        {% elseif key == 'company' %}
+                            About Arknox Technology and leadership team
+                        {% elseif key == 'api' %}
+                            Complete API reference and examples
+                        {% endif %}
+                    </p>
+                    <a href="/docs/{{ key }}" class="btn btn-outline-primary btn-sm">Read →</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Quick Links -->
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4 mb-4">
+                <div class="section-card text-center">
+                    <h4 class="fw-bold">🚀 Quick Start</h4>
+                    <p>Get Arknox Framework running in minutes</p>
+                    <code class="d-block bg-dark text-light p-3 rounded mb-3">
+                        composer create-project arknox/framework my-app<br>
+                        cd my-app<br>
+                        arknox serve
+                    </code>
+                    <a href="/docs/installation" class="btn btn-primary">Install Now</a>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 mb-4">
+                <div class="section-card text-center">
+                    <h4 class="fw-bold">📚 Learn More</h4>
+                    <p>Dive deep into framework features</p>
+                    <ul class="list-unstyled text-start">
+                        <li><a href="/docs/database">Enhanced ORM</a></li>
+                        <li><a href="/docs/templates">Twig Templates</a></li>
+                        <li><a href="/docs/debugging">Advanced Debugging</a></li>
+                        <li><a href="/docs/cli">CLI Commands</a></li>
+                    </ul>
+                    <a href="/docs/features" class="btn btn-outline-primary">Explore Features</a>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 mb-4">
+                <div class="section-card text-center">
+                    <h4 class="fw-bold">🏢 About Us</h4>
+                    <p>Learn about Arknox Technology and our team</p>
+                    <ul class="list-unstyled text-start">
+                        <li><a href="/docs/company">About Arknox Technology</a></li>
+                        <li><a href="https://arknox.dev">Official Website</a></li>
+                        <li><strong>CEO:</strong> Akash Hossain</li>
+                        <li><a href="mailto:akash@arknox.dev">Contact CEO</a></li>
+                    </ul>
+                    <a href="/docs/company" class="btn btn-outline-primary">Learn More</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-6 mb-4">
+                <div class="section-card text-center">
+                    <h4 class="fw-bold">🤝 Get Help</h4>
+                    <p>Join our community and get support</p>
+                    <ul class="list-unstyled text-start">
+                        <li><a href="https://community.arknox.dev">Community Forum</a></li>
+                        <li><a href="https://discord.gg/arknox">Discord Chat</a></li>
+                        <li><a href="https://github.com/arknox/framework">GitHub Issues</a></li>
+                        <li><a href="mailto:support@arknox.dev">Email Support</a></li>
+                    </ul>
+                    <a href="https://community.arknox.dev" class="btn btn-outline-primary">Join Community</a>
+                </div>
+            </div>
+
+            <div class="col-lg-6 mb-4">
+                <div class="section-card text-center">
+                    <h4 class="fw-bold">🌐 Connect</h4>
+                    <p>Follow us and stay updated</p>
+                    <ul class="list-unstyled text-start">
+                        <li><a href="https://github.com/arknox/framework">GitHub Repository</a></li>
+                        <li><a href="https://twitter.com/arknoxframework">Twitter Updates</a></li>
+                        <li><a href="https://linkedin.com/company/arknox">LinkedIn Company</a></li>
+                        <li><a href="https://arknox.dev/blog">Company Blog</a></li>
+                    </ul>
+                    <a href="https://arknox.dev" class="btn btn-outline-primary">Visit Website</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Back to Welcome -->
+<section class="py-4 bg-primary text-white">
+    <div class="container text-center">
+        <a href="/" class="btn btn-outline-light">← Back to Welcome Page</a>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Add search functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        // Focus search box on Ctrl+K or Cmd+K
+        document.addEventListener('keydown', function(e) {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+                e.preventDefault();
+                document.querySelector('input[name="q"]').focus();
+            }
+        });
+        
+        // Animate section cards
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+        
+        // Observe section cards
+        document.querySelectorAll('.section-card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(30px)';
+            card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(card);
+        });
+    });
+</script>
+{% endblock %}

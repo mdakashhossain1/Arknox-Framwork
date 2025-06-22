@@ -1,0 +1,74 @@
+RewriteEngine On
+
+# MVC Routing - Route all requests through index.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_URI} !^/(assets|uploads|spinner|pass_reset)/
+RewriteRule ^(.*)$ index.php [QSA,L]
+
+# Handle direct access to root
+RewriteRule ^$ index.php [QSA,L]
+
+# Error handling is now managed by the MVC framework
+# See app/Views/errors/ for error templates
+
+# Prevent direct access to assets files
+# RewriteCond %{REQUEST_URI} \.(css|js|jpg|jpeg|png|svg|gif)$ [NC]
+# RewriteRule ^ - [F]
+
+# Block known bot user agents
+RewriteCond %{HTTP_USER_AGENT} (googlebot|bingbot|yahoo|baidu|yandex|msnbot) [NC]
+RewriteRule ^ - [F]
+
+# Block access from VPS IP ranges
+RewriteCond %{REMOTE_ADDR} ^1\.2\.3\.4$ [OR]
+RewriteCond %{REMOTE_ADDR} ^5\.6\.7\.8$
+RewriteRule ^ - [F]
+
+# Block access from fake or invalid IP addresses
+RewriteCond %{REMOTE_ADDR} ^0\.0\.0\.0$ [OR]
+RewriteCond %{REMOTE_ADDR} ^255\.255\.255\.255$ [OR]
+RewriteCond %{REMOTE_ADDR} ^127\.0\.0\.1$
+RewriteRule ^ - [F]
+
+# Block access from DNS checkers
+RewriteCond %{HTTP_USER_AGENT} (dnsstuff|dnsleaktest|whatismydns) [NC]
+RewriteRule ^ - [F]
+
+# Block access to sensitive files and directories
+<FilesMatch "(\.htaccess|\.htpasswd|config\.php|php\.ini|\.env)">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Block access to specific user agents (spiders/crawlers)
+SetEnvIfNoCase User-Agent "spider" bad_bot
+SetEnvIfNoCase User-Agent "crawler" bad_bot
+Order Allow,Deny
+Allow from all
+Deny from env=bad_bot
+
+# Block access from specific IP addresses or IP ranges
+Deny from 1.2.3.4
+Deny from 5.6.7.0/24
+
+# Block access to XML-RPC and trackback files
+<FilesMatch "^(xmlrpc\.php|wp-trackback\.php)">
+    Order Deny,Allow
+    Deny from all
+</FilesMatch>
+
+# Block access to SQL injection attempts
+RewriteCond %{QUERY_STRING} (\<|%3C).*script.*(\>|%3E) [NC,OR]
+RewriteCond %{QUERY_STRING} GLOBALS(=|\[|\%[0-9A-Z]{0,2}) [OR]
+RewriteCond %{QUERY_STRING} _REQUEST(=|\[|\%[0-9A-Z]{0,2})
+RewriteRule ^(.*)$ - [F,L]
+
+# Block access to common exploit patterns
+RewriteRule ^(pma|phpmyadmin|myadmin|mysql|mysqladmin|sqladmin|wp-admin|wp-login|admin)$ - [F,L]
+
+# Block access to backup and log files
+RewriteRule ^(.*)\.(bak|log|sql|tar|zip|gz)$ - [F,L]
+
+
+

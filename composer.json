@@ -1,0 +1,163 @@
+{
+    "name": "arknox/framework",
+    "description": "The most advanced PHP framework for modern web development - 10x performance with banking-grade security",
+    "keywords": [
+        "framework",
+        "php",
+        "mvc",
+        "orm",
+        "eloquent",
+        "laravel",
+        "symfony",
+        "performance",
+        "security",
+        "enterprise",
+        "arknox"
+    ],
+    "license": "MIT",
+    "type": "project",
+    "version": "1.0.0",
+    "authors": [
+        {
+            "name": "Arknox Team",
+            "email": "team@arknox.dev",
+            "homepage": "https://arknox.dev"
+        }
+    ],
+    "homepage": "https://arknox.dev",
+    "support": {
+        "issues": "https://github.com/arknox/framework/issues",
+        "source": "https://github.com/arknox/framework",
+        "docs": "https://docs.arknox.dev",
+        "forum": "https://community.arknox.dev"
+    },
+    "require": {
+        "php": "^8.1",
+        "ext-curl": "*",
+        "ext-json": "*",
+        "ext-mbstring": "*",
+        "ext-openssl": "*",
+        "ext-pdo": "*",
+        "firebase/php-jwt": "^6.8",
+        "guzzlehttp/guzzle": "^7.7",
+        "intervention/image": "^2.7",
+        "league/commonmark": "^2.4",
+        "league/flysystem": "^3.15",
+        "league/oauth2-server": "^8.4",
+        "monolog/monolog": "^3.4",
+        "nesbot/carbon": "^2.68",
+        "predis/predis": "^2.2",
+        "ramsey/uuid": "^4.7",
+        "symfony/console": "^6.0",
+        "symfony/finder": "^6.0",
+        "twig/twig": "^3.7",
+        "vlucas/phpdotenv": "^5.5"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^10.3",
+        "mockery/mockery": "^1.6",
+        "fakerphp/faker": "^1.23",
+        "symfony/var-dumper": "^6.0",
+        "phpstan/phpstan": "^1.10",
+        "squizlabs/php_codesniffer": "^3.7",
+        "friendsofphp/php-cs-fixer": "^3.21"
+    },
+    "suggest": {
+        "ext-redis": "Required for Redis cache and session support",
+        "ext-memcached": "Required for Memcached cache support",
+        "ext-imagick": "Required for advanced image processing",
+        "ext-gd": "Required for basic image processing",
+        "ext-zip": "Required for file compression features",
+        "ext-bcmath": "Required for arbitrary precision mathematics",
+        "ext-intl": "Required for internationalization features"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/",
+            "Arknox\\": "framework/"
+        },
+        "files": [
+            "app/Core/helpers.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "@php arknox optimize:clear",
+            "@php arknox package:discover"
+        ],
+        "post-update-cmd": [
+            "@php arknox optimize:clear",
+            "@php arknox package:discover"
+        ],
+        "post-create-project-cmd": [
+            "@php arknox key:generate --ansi",
+            "@php arknox env:setup --ansi"
+        ],
+        "test": [
+            "vendor/bin/phpunit"
+        ],
+        "test-coverage": [
+            "vendor/bin/phpunit --coverage-html coverage"
+        ],
+        "analyse": [
+            "vendor/bin/phpstan analyse"
+        ],
+        "format": [
+            "vendor/bin/php-cs-fixer fix"
+        ],
+        "check-style": [
+            "vendor/bin/phpcs"
+        ],
+        "fix-style": [
+            "vendor/bin/phpcbf"
+        ],
+        "serve": [
+            "@php arknox serve"
+        ],
+        "fresh": [
+            "@php arknox migrate:fresh --seed"
+        ]
+    },
+    "extra": {
+        "arknox": {
+            "providers": [
+                "App\\Providers\\AppServiceProvider",
+                "App\\Providers\\AuthServiceProvider",
+                "App\\Providers\\EventServiceProvider",
+                "App\\Providers\\RouteServiceProvider"
+            ],
+            "aliases": {
+                "Arknox": "App\\Core\\Facades\\Arknox",
+                "DB": "App\\Core\\Facades\\DB",
+                "Cache": "App\\Core\\Facades\\Cache",
+                "Event": "App\\Core\\Facades\\Event",
+                "Queue": "App\\Core\\Facades\\Queue",
+                "Plugin": "App\\Core\\Facades\\Plugin"
+            }
+        },
+        "branch-alias": {
+            "dev-main": "1.0-dev"
+        }
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "allow-plugins": {
+            "composer/package-versions-deprecated": true
+        },
+        "platform": {
+            "php": "8.1"
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "bin": [
+        "arknox"
+    ]
+}

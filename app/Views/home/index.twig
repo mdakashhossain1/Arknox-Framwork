@@ -1,0 +1,118 @@
+{% extends "layouts/main.twig" %}
+
+{% block head %}
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 600px;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 1rem;
+        }
+        p {
+            color: #666;
+            line-height: 1.6;
+        }
+        .framework-info {
+            background: #e8f4fd;
+            padding: 1rem;
+            border-radius: 4px;
+            margin-top: 1rem;
+        }
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        .feature-card {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 6px;
+            border-left: 4px solid #007bff;
+        }
+        .feature-card h4 {
+            margin-top: 0;
+            color: #007bff;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h1>{{ title|default('Welcome to Arknox Framework') }}</h1>
+        <p>{{ message|default('Welcome to your fresh Arknox Framework with Twig support!') }}</p>
+        
+        <div class="framework-info">
+            <h3>🚀 Getting Started with Arknox Framework</h3>
+            <p>Your Arknox Framework is now ready for development with Twig template engine:</p>
+            <ul style="text-align: left; display: inline-block;">
+                <li>Create controllers in <code>app/Controllers/</code></li>
+                <li>Create models in <code>app/Models/</code></li>
+                <li>Create PHP views in <code>app/Views/</code></li>
+                <li>Create Twig templates in <code>app/Views/</code> with <code>.twig</code> extension</li>
+                <li>Define routes in <code>config/routes.php</code></li>
+                <li>Use the <code>arknox</code> CLI for rapid development</li>
+            </ul>
+        </div>
+
+        <div class="feature-grid">
+            <div class="feature-card">
+                <h4>🎨 Twig Templates</h4>
+                <p>Beautiful, secure, and fast template engine with inheritance, filters, and functions.</p>
+                <small>Example: <code>{{ '{{ title|upper }}' }}</code></small>
+            </div>
+            
+            <div class="feature-card">
+                <h4>🔒 Security First</h4>
+                <p>Built-in CSRF protection, XSS prevention, and secure session handling.</p>
+                <small>Use: <code>{{ '{{ csrf_field()|raw }}' }}</code></small>
+            </div>
+            
+            <div class="feature-card">
+                <h4>⚡ High Performance</h4>
+                <p>Optimized for speed with caching, lazy loading, and efficient database queries.</p>
+                <small>Cache: <code>{{ config('cache_enabled') ? 'Enabled' : 'Disabled' }}</code></small>
+            </div>
+            
+            <div class="feature-card">
+                <h4>🛠️ Developer Tools</h4>
+                <p>Powerful CLI, debugging tools, and comprehensive documentation.</p>
+                <small>Debug: <code>{{ debug ? 'ON' : 'OFF' }}</code></small>
+            </div>
+        </div>
+
+        {% if debug %}
+            <div style="margin-top: 2rem; padding: 1rem; background: #fff3cd; border-radius: 4px;">
+                <h4>🐛 Debug Information</h4>
+                <p><strong>Framework:</strong> {{ app_name }} v{{ app_version }}</p>
+                <p><strong>Template Engine:</strong> Twig {{ constant('Twig\\Environment::VERSION') }}</p>
+                <p><strong>PHP Version:</strong> {{ constant('PHP_VERSION') }}</p>
+                <p><strong>Environment:</strong> {{ env('APP_ENV', 'development') }}</p>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        console.log('🎉 Arknox Framework with Twig is ready!');
+        console.log('Framework: {{ app_name }} v{{ app_version }}');
+        console.log('Debug Mode: {{ debug ? "ON" : "OFF" }}');
+    </script>
+{% endblock %}

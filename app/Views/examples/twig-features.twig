@@ -1,0 +1,217 @@
+{% extends "layouts/main.twig" %}
+
+{% set page_title = "Twig Features Demo" %}
+
+{% block head %}
+    {{ css('examples.css')|raw }}
+    <style>
+        .demo-section {
+            margin: 2rem 0;
+            padding: 1.5rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: #f9f9f9;
+        }
+        .demo-section h3 {
+            margin-top: 0;
+            color: #333;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 0.5rem;
+        }
+        .code-example {
+            background: #f4f4f4;
+            padding: 1rem;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            margin: 0.5rem 0;
+        }
+        .output {
+            background: #e8f5e8;
+            padding: 1rem;
+            border-radius: 4px;
+            border-left: 4px solid #28a745;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h1>{{ page_title }}</h1>
+        <p>This page demonstrates various Twig features available in the Arknox Framework.</p>
+
+        <!-- Variables and Filters -->
+        <div class="demo-section">
+            <h3>🔤 Variables and Filters</h3>
+            
+            <h4>Basic Variables:</h4>
+            <div class="code-example">{{ '{{ title|default("Default Title") }}' }}</div>
+            <div class="output">{{ title|default("Default Title") }}</div>
+            
+            <h4>Text Filters:</h4>
+            <div class="code-example">{{ '{{ "hello world"|upper }}' }}</div>
+            <div class="output">{{ "hello world"|upper }}</div>
+            
+            <div class="code-example">{{ '{{ "This is a long text that will be truncated"|truncate(20) }}' }}</div>
+            <div class="output">{{ "This is a long text that will be truncated"|truncate(20) }}</div>
+            
+            <h4>Custom Filters:</h4>
+            <div class="code-example">{{ '{{ 1234.56|currency("$") }}' }}</div>
+            <div class="output">{{ 1234.56|currency("$") }}</div>
+            
+            <div class="code-example">{{ '{{ "hello-world-example"|slug }}' }}</div>
+            <div class="output">{{ "hello-world-example"|slug }}</div>
+        </div>
+
+        <!-- Functions -->
+        <div class="demo-section">
+            <h3>⚙️ Framework Functions</h3>
+            
+            <h4>URL Generation:</h4>
+            <div class="code-example">{{ '{{ url("/about") }}' }}</div>
+            <div class="output">{{ url("/about") }}</div>
+            
+            <div class="code-example">{{ '{{ asset("css/style.css") }}' }}</div>
+            <div class="output">{{ asset("css/style.css") }}</div>
+            
+            <h4>HTML Helpers:</h4>
+            <div class="code-example">{{ '{{ css("bootstrap.css")|raw }}' }}</div>
+            <div class="output">{{ css("bootstrap.css") }}</div>
+            
+            <div class="code-example">{{ '{{ js("app.js")|raw }}' }}</div>
+            <div class="output">{{ js("app.js") }}</div>
+            
+            <h4>Security:</h4>
+            <div class="code-example">{{ '{{ csrf_field()|raw }}' }}</div>
+            <div class="output">{{ csrf_field() }}</div>
+        </div>
+
+        <!-- Control Structures -->
+        <div class="demo-section">
+            <h3>🔄 Control Structures</h3>
+            
+            <h4>Conditionals:</h4>
+            <div class="code-example">
+{% raw %}
+{% if debug %}
+    Debug mode is ON
+{% else %}
+    Debug mode is OFF
+{% endif %}
+{% endraw %}
+            </div>
+            <div class="output">
+                {% if debug %}
+                    Debug mode is ON
+                {% else %}
+                    Debug mode is OFF
+                {% endif %}
+            </div>
+            
+            <h4>Loops:</h4>
+            {% set sample_items = ['Apple', 'Banana', 'Cherry', 'Date'] %}
+            <div class="code-example">
+{% raw %}
+{% for item in items %}
+    {{ loop.index }}. {{ item }}
+{% endfor %}
+{% endraw %}
+            </div>
+            <div class="output">
+                {% for item in sample_items %}
+                    {{ loop.index }}. {{ item }}<br>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Template Inheritance -->
+        <div class="demo-section">
+            <h3>🏗️ Template Inheritance</h3>
+            <p>This page extends the main layout using:</p>
+            <div class="code-example">{% raw %}{% extends "layouts/main.twig" %}{% endraw %}</div>
+            
+            <p>And defines content blocks:</p>
+            <div class="code-example">
+{% raw %}
+{% block content %}
+    <!-- Page content here -->
+{% endblock %}
+{% endraw %}
+            </div>
+        </div>
+
+        <!-- Configuration and Environment -->
+        <div class="demo-section">
+            <h3>⚙️ Configuration Access</h3>
+            
+            <h4>App Configuration:</h4>
+            <div class="code-example">{{ '{{ config("app_name") }}' }}</div>
+            <div class="output">{{ config("app_name") }}</div>
+            
+            <div class="code-example">{{ '{{ config("app_version") }}' }}</div>
+            <div class="output">{{ config("app_version") }}</div>
+            
+            <h4>Environment Variables:</h4>
+            <div class="code-example">{{ '{{ env("APP_ENV", "development") }}' }}</div>
+            <div class="output">{{ env("APP_ENV", "development") }}</div>
+        </div>
+
+        <!-- Date and Time -->
+        <div class="demo-section">
+            <h3>📅 Date and Time</h3>
+            
+            <div class="code-example">{{ '{{ "now"|date("Y-m-d H:i:s") }}' }}</div>
+            <div class="output">{{ "now"|date("Y-m-d H:i:s") }}</div>
+            
+            <div class="code-example">{{ '{{ "2024-01-01"|date_format("F j, Y") }}' }}</div>
+            <div class="output">{{ "2024-01-01"|date_format("F j, Y") }}</div>
+        </div>
+
+        <!-- Authentication (if available) -->
+        <div class="demo-section">
+            <h3>🔐 Authentication</h3>
+            
+            <div class="code-example">{{ '{{ auth_check() ? "Logged in" : "Not logged in" }}' }}</div>
+            <div class="output">{{ auth_check() ? "Logged in" : "Not logged in" }}</div>
+            
+            {% if auth_check() %}
+                <div class="code-example">{{ '{{ auth_user().name ?? "Unknown User" }}' }}</div>
+                <div class="output">{{ auth_user().name ?? "Unknown User" }}</div>
+            {% endif %}
+        </div>
+
+        <!-- Flash Messages -->
+        <div class="demo-section">
+            <h3>💬 Flash Messages</h3>
+            <p>Flash messages are automatically displayed in the main layout, but you can also access them manually:</p>
+            
+            <div class="code-example">{{ '{{ flash("success") }}' }}</div>
+            <div class="output">{{ flash("success") ?? "No success message" }}</div>
+            
+            <div class="code-example">{{ '{{ flash("error") }}' }}</div>
+            <div class="output">{{ flash("error") ?? "No error message" }}</div>
+        </div>
+
+        <!-- Form Helpers -->
+        <div class="demo-section">
+            <h3>📝 Form Helpers</h3>
+            
+            <h4>CSRF Protection:</h4>
+            <div class="code-example">{{ '{{ csrf_field()|raw }}' }}</div>
+            
+            <h4>Old Input (for form validation):</h4>
+            <div class="code-example">{{ '{{ old("username", "default_value") }}' }}</div>
+            <div class="output">{{ old("username", "default_value") }}</div>
+            
+            <h4>Validation Errors:</h4>
+            <div class="code-example">{{ '{{ errors("username")|length > 0 ? "Has errors" : "No errors" }}' }}</div>
+            <div class="output">{{ errors("username")|length > 0 ? "Has errors" : "No errors" }}</div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        console.log('Twig Features Demo loaded successfully!');
+        console.log('Current time: {{ "now"|date("c") }}');
+    </script>
+{% endblock %}

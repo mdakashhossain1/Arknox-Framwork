@@ -1,0 +1,242 @@
+{% extends "layouts/main.twig" %}
+
+{% block head %}
+    <style>
+        .info-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 60px 0;
+            text-align: center;
+        }
+        .info-card {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .info-table {
+            margin-bottom: 0;
+        }
+        .info-table th {
+            background: #f8f9fa;
+            border: none;
+            font-weight: 600;
+            width: 40%;
+        }
+        .info-table td {
+            border: none;
+            padding: 12px 15px;
+        }
+        .status-enabled {
+            color: #28a745;
+            font-weight: 600;
+        }
+        .status-disabled {
+            color: #dc3545;
+            font-weight: 600;
+        }
+        .back-btn {
+            background: rgba(255,255,255,0.2);
+            border: 2px solid white;
+            color: white;
+            padding: 10px 25px;
+            border-radius: 25px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        .back-btn:hover {
+            background: white;
+            color: #667eea;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+<!-- Header Section -->
+<section class="info-header">
+    <div class="container">
+        <h1 class="display-4 fw-bold">{{ title }}</h1>
+        <p class="lead">Arknox Framework System Information</p>
+        <a href="/" class="back-btn">← Back to Welcome</a>
+    </div>
+</section>
+
+<!-- System Information -->
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <!-- System Info Card -->
+            <div class="col-lg-6 mb-4">
+                <div class="info-card">
+                    <h3 class="fw-bold mb-4">
+                        <i class="fas fa-server me-2"></i>
+                        System Information
+                    </h3>
+                    <table class="table info-table">
+                        {% for key, value in system_info %}
+                        <tr>
+                            <th>{{ key }}</th>
+                            <td>{{ value }}</td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+
+            <!-- PHP Extensions Card -->
+            <div class="col-lg-6 mb-4">
+                <div class="info-card">
+                    <h3 class="fw-bold mb-4">
+                        <i class="fas fa-puzzle-piece me-2"></i>
+                        PHP Extensions
+                    </h3>
+                    <table class="table info-table">
+                        {% for extension, status in extensions %}
+                        <tr>
+                            <th>{{ extension }}</th>
+                            <td>
+                                {% if '✅' in status %}
+                                    <span class="status-enabled">{{ status }}</span>
+                                {% else %}
+                                    <span class="status-disabled">{{ status }}</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Framework Features -->
+        <div class="row">
+            <div class="col-12">
+                <div class="info-card">
+                    <h3 class="fw-bold mb-4">
+                        <i class="fas fa-rocket me-2"></i>
+                        Framework Features Status
+                    </h3>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <table class="table info-table">
+                                <tr>
+                                    <th>Enhanced ORM</th>
+                                    <td><span class="status-enabled">✅ Active</span></td>
+                                </tr>
+                                <tr>
+                                    <th>Multi-Database Support</th>
+                                    <td><span class="status-enabled">✅ Active</span></td>
+                                </tr>
+                                <tr>
+                                    <th>Twig Template Engine</th>
+                                    <td><span class="status-enabled">✅ Active</span></td>
+                                </tr>
+                                <tr>
+                                    <th>Advanced Debugging</th>
+                                    <td><span class="status-enabled">✅ Active</span></td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-md-6">
+                            <table class="table info-table">
+                                <tr>
+                                    <th>Package Management</th>
+                                    <td><span class="status-enabled">✅ Active</span></td>
+                                </tr>
+                                <tr>
+                                    <th>CLI Commands</th>
+                                    <td><span class="status-enabled">✅ Active</span></td>
+                                </tr>
+                                <tr>
+                                    <th>Security Features</th>
+                                    <td><span class="status-enabled">✅ Active</span></td>
+                                </tr>
+                                <tr>
+                                    <th>Performance Optimization</th>
+                                    <td><span class="status-enabled">✅ Active</span></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="row">
+            <div class="col-12">
+                <div class="info-card text-center">
+                    <h3 class="fw-bold mb-4">Quick Actions</h3>
+                    <div class="d-flex flex-wrap justify-content-center gap-3">
+                        <a href="/docs" class="btn btn-primary">📚 Documentation</a>
+                        <a href="/docs/cli" class="btn btn-outline-primary">⚡ CLI Commands</a>
+                        <a href="/docs/getting-started" class="btn btn-outline-primary">🚀 Getting Started</a>
+                        <a href="/health" class="btn btn-outline-success">🔍 Health Check</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Performance Tips -->
+        <div class="row">
+            <div class="col-12">
+                <div class="info-card">
+                    <h3 class="fw-bold mb-4">
+                        <i class="fas fa-tachometer-alt me-2"></i>
+                        Performance Recommendations
+                    </h3>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>✅ Enabled Features</h5>
+                            <ul class="list-unstyled">
+                                {% for extension, status in extensions %}
+                                    {% if '✅' in status %}
+                                        <li class="status-enabled">✓ {{ extension }}</li>
+                                    {% endif %}
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>⚠️ Recommended Optimizations</h5>
+                            <ul class="list-unstyled">
+                                {% for extension, status in extensions %}
+                                    {% if '❌' in status %}
+                                        <li class="status-disabled">• Install {{ extension }} for better performance</li>
+                                    {% endif %}
+                                {% endfor %}
+                                {% if extensions.OPcache == '❌ Disabled' %}
+                                    <li class="status-disabled">• Enable OPcache for 2-3x performance boost</li>
+                                {% endif %}
+                                {% if extensions.Redis == '❌ Disabled' %}
+                                    <li class="status-disabled">• Install Redis for advanced caching</li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Add some interactive effects
+    document.addEventListener('DOMContentLoaded', function() {
+        // Animate cards on load
+        const cards = document.querySelectorAll('.info-card');
+        cards.forEach((card, index) => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(30px)';
+            card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            
+            setTimeout(() => {
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+            }, index * 100);
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,110 @@
+<footer class="bg-dark text-light py-5 mt-5">
+    <div class="container">
+        <div class="row">
+            <!-- Brand Section -->
+            <div class="col-lg-4 mb-4">
+                <div class="d-flex align-items-center mb-3">
+                    <img src="{{ asset('img/arknox.png') }}" alt="Arknox Framework" style="height: 40px; filter: brightness(0) invert(1);" class="me-2">
+                    <h5 class="fw-bold mb-0">Arknox Framework</h5>
+                </div>
+                <p class="text-muted">
+                    The most advanced PHP framework for modern web development.
+                    10x faster performance with banking-grade security.
+                </p>
+
+                <!-- Company Information -->
+                <div class="mb-3">
+                    <h6 class="fw-bold text-light">Developed by Arknox Technology</h6>
+                    <p class="text-muted small mb-2">
+                        <strong>CEO & Founder:</strong> Akash Hossain<br>
+                        <strong>Website:</strong> <a href="https://arknox.dev" class="text-light">arknox.dev</a>
+                    </p>
+                </div>
+
+                <div class="d-flex gap-3">
+                    <a href="https://github.com/arknox/framework" class="text-light" target="_blank" title="GitHub">
+                        <i class="fab fa-github fa-lg"></i>
+                    </a>
+                    <a href="https://discord.gg/arknox" class="text-light" target="_blank" title="Discord">
+                        <i class="fab fa-discord fa-lg"></i>
+                    </a>
+                    <a href="https://twitter.com/arknoxframework" class="text-light" target="_blank" title="Twitter">
+                        <i class="fab fa-twitter fa-lg"></i>
+                    </a>
+                    <a href="https://arknox.dev" class="text-light" target="_blank" title="Official Website">
+                        <i class="fas fa-globe fa-lg"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Documentation Links -->
+            <div class="col-lg-2 col-md-6 mb-4">
+                <h6 class="fw-bold">Documentation</h6>
+                <ul class="list-unstyled">
+                    <li><a href="/docs/getting-started" class="text-muted text-decoration-none">Getting Started</a></li>
+                    <li><a href="/docs/installation" class="text-muted text-decoration-none">Installation</a></li>
+                    <li><a href="/docs/cli" class="text-muted text-decoration-none">CLI Commands</a></li>
+                    <li><a href="/docs/api" class="text-muted text-decoration-none">API Reference</a></li>
+                </ul>
+            </div>
+
+            <!-- Features Links -->
+            <div class="col-lg-2 col-md-6 mb-4">
+                <h6 class="fw-bold">Features</h6>
+                <ul class="list-unstyled">
+                    <li><a href="/docs/database" class="text-muted text-decoration-none">Enhanced ORM</a></li>
+                    <li><a href="/docs/templates" class="text-muted text-decoration-none">Twig Templates</a></li>
+                    <li><a href="/docs/debugging" class="text-muted text-decoration-none">Advanced Debugging</a></li>
+                    <li><a href="/docs/packages" class="text-muted text-decoration-none">Package Management</a></li>
+                </ul>
+            </div>
+
+            <!-- Support Links -->
+            <div class="col-lg-2 col-md-6 mb-4">
+                <h6 class="fw-bold">Support</h6>
+                <ul class="list-unstyled">
+                    <li><a href="https://community.arknox.dev" class="text-muted text-decoration-none">Community Forum</a></li>
+                    <li><a href="/docs/troubleshooting" class="text-muted text-decoration-none">Troubleshooting</a></li>
+                    <li><a href="https://github.com/arknox/framework/issues" class="text-muted text-decoration-none">Report Issues</a></li>
+                    <li><a href="mailto:support@arknox.dev" class="text-muted text-decoration-none">Email Support</a></li>
+                </ul>
+            </div>
+
+            <!-- System Info -->
+            <div class="col-lg-2 col-md-6 mb-4">
+                <h6 class="fw-bold">System</h6>
+                <ul class="list-unstyled">
+                    <li><a href="/info" class="text-muted text-decoration-none">System Info</a></li>
+                    <li><a href="/health" class="text-muted text-decoration-none">Health Check</a></li>
+                    <li><a href="/docs/deployment" class="text-muted text-decoration-none">Deployment</a></li>
+                    <li><a href="/docs/comparison" class="text-muted text-decoration-none">Framework Comparison</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <hr class="my-4">
+
+        <!-- Bottom Footer -->
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <p class="mb-1 text-muted">
+                    &copy; {{ "now"|date("Y") }} <strong class="text-light">Arknox Technology</strong>. All rights reserved.
+                </p>
+                <p class="mb-0 small text-muted">
+                    Arknox Framework - A product of <strong class="text-light">Arknox Technology</strong> |
+                    CEO: <strong class="text-light">Akash Hossain</strong> |
+                    <a href="https://arknox.dev" class="text-light text-decoration-none">arknox.dev</a>
+                </p>
+            </div>
+            <div class="col-md-4 text-md-end">
+                <small class="text-muted">
+                    Powered by <strong class="text-light">Arknox Framework</strong> v{{ app_version|default('1.0.0') }}
+                    | PHP {{ constant('PHP_VERSION') }}
+                    {% if debug %}
+                        | <span class="text-warning">Debug Mode: ON</span>
+                    {% endif %}
+                </small>
+            </div>
+        </div>
+    </div>
+</footer>
