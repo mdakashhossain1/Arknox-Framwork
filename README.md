@@ -56,7 +56,7 @@ Arknox Framework stands out from other PHP frameworks by offering:
 To revolutionize web development by creating frameworks and tools that empower developers to build faster, more secure, and more maintainable applications.
 
 #### **Official Website**
-🌐 **https://arknox.dev** - Visit our official website for the latest updates, resources, and enterprise solutions
+🌐 **https://arknox.in** - Visit our official website for the latest updates, resources, and enterprise solutions
 
 ---
 
@@ -2038,7 +2038,7 @@ arknox serve
 
 - **Company**: Arknox Technology
 - **CEO & Founder**: Akash Hossain
-- **Website**: https://arknox.dev
+- **Website**: https://arknox.in
 - **Framework**: Arknox Framework
 - **Mission**: Revolutionizing web development through cutting-edge technology
 
@@ -2046,5 +2046,5 @@ arknox serve
 
 *Built with ❤️ by the Arknox Technology team under the leadership of CEO Akash Hossain*
 *© 2025 Arknox Technology. All rights reserved.*
-*Arknox Framework - A product of Arknox Technology | https://arknox.dev*
+*Arknox Framework - A product of Arknox Technology | https://arknox.in*
 #
