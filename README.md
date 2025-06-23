@@ -977,7 +977,7 @@ if (mvc_has_package('monolog/monolog')) {
 
 ### Getting Help
 - **Email**: support@arknox.in
-- **WhatsApp**: +91 9366662076
+- **WhatsApp**: +91 8787388949
 - **Documentation**: Comprehensive inline code documentation
 
 ### Resources
