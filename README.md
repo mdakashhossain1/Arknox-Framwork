@@ -976,7 +976,7 @@ if (mvc_has_package('monolog/monolog')) {
 ## 📞 Support & Documentation
 
 ### Getting Help
-- **Email**: support@diamondmax.com
+- **Email**: support@arknox.in
 - **WhatsApp**: +91 9366662076
 - **Documentation**: Comprehensive inline code documentation
 
