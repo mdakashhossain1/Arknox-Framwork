@@ -1751,7 +1751,7 @@ chmod 600 config/*.php
 - **GitHub Issues** - https://github.com/arknox/framework/issues
 
 #### **Support Channels**
-- **Email Support**: support@arknox.dev
+- **Email Support**: support@arknox.in
 - **Community Discord**: https://discord.gg/arknox
 - **Stack Overflow**: Tag questions with `arknox-framework`
 - **Professional Support**: Available for enterprise users
